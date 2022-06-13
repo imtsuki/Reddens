@@ -726,7 +726,7 @@
                 </windowController>
                 <customObject id="AmB-KP-DTE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-586" y="329"/>
+            <point key="canvasLocation" x="-586" y="386"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="SSm-0e-NsO">
@@ -737,7 +737,7 @@
                         <splitViewItem holdingPriority="255" behavior="contentList" id="T2V-T4-MTq"/>
                     </splitViewItems>
                     <splitView key="splitView" dividerStyle="thin" vertical="YES" id="ZCL-Di-d41">
-                        <rect key="frame" x="0.0" y="0.0" width="479" height="300"/>
+                        <rect key="frame" x="28" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </splitView>
                     <connections>
@@ -747,7 +747,7 @@
                 </splitViewController>
                 <customObject id="d9Y-PX-sb4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="19.5" y="336"/>
+            <point key="canvasLocation" x="-25" y="386"/>
         </scene>
         <!--Sidebar View Controller-->
         <scene sceneID="g8D-bD-CVp">
@@ -755,25 +755,25 @@
                 <hostingController id="11S-zt-B3u" customClass="SidebarViewController" customModule="Reddens" customModuleProvider="target" sceneMemberID="viewController"/>
                 <customObject id="Auw-bV-Fjy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="878" y="33"/>
+            <point key="canvasLocation" x="607" y="157"/>
         </scene>
         <!--Content View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ContentViewController" customModule="Reddens" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="360"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KNI-iC-FBL">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="218"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="308"/>
                                 <subviews>
                                     <customView fixedFrame="YES" id="0a3-O9-zHQ" customClass="MTKView">
-                                        <rect key="frame" x="0.0" y="0.0" width="364" height="218"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="451" height="308"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </customView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" id="s8X-vi-Iqa" customClass="HostedInspectorView" customModule="Reddens" customModuleProvider="target">
-                                        <rect key="frame" x="365" y="0.0" width="115" height="218"/>
+                                        <rect key="frame" x="452" y="0.0" width="148" height="308"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </stackView>
                                 </subviews>
@@ -798,7 +798,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="663" y="469"/>
+            <point key="canvasLocation" x="682" y="586"/>
         </scene>
     </scenes>
     <resources>

@@ -6,9 +6,20 @@ class Renderer: NSObject {
     static var commandQueue: MTLCommandQueue!
     static var library: MTLLibrary!
 
+    static var defaultVertexDescriptor: MTLVertexDescriptor {
+        let vertexDescriptor = MTLVertexDescriptor()
+        vertexDescriptor.attributes[0].format = .float3
+        vertexDescriptor.attributes[0].offset = 0
+        vertexDescriptor.attributes[0].bufferIndex = 0
+        vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
+        return vertexDescriptor
+    }
+
     var mesh: MTKMesh!
     var vertexBuffer: MTLBuffer!
     var pipelineState: MTLRenderPipelineState!
+
+    var uniforms = Uniforms()
 
     weak var metalView: MTKView!
 
@@ -35,7 +46,7 @@ class Renderer: NSObject {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = vertexFn
         pipelineDescriptor.fragmentFunction = fragmentFn
-        pipelineDescriptor.vertexDescriptor = defaultVertexDescriptor
+        pipelineDescriptor.vertexDescriptor = Renderer.defaultVertexDescriptor
         pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
         do {
             pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -51,20 +62,10 @@ class Renderer: NSObject {
         metalView.delegate = self
     }
 
-    lazy var defaultVertexDescriptor: MTLVertexDescriptor = {
-        let vertexDescriptor = MTLVertexDescriptor()
-        vertexDescriptor.attributes[0].format = .float3
-        vertexDescriptor.attributes[0].offset = 0
-        vertexDescriptor.attributes[0].bufferIndex = 0
-        vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
-        return vertexDescriptor
-    }()
-
     func loadAsset(url: URL) {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
 
-        let meshDescriptor =
-          MTKModelIOVertexDescriptorFromMetal(defaultVertexDescriptor)
+        let meshDescriptor = MTKModelIOVertexDescriptorFromMetal(Renderer.defaultVertexDescriptor)
         (meshDescriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
 
         let asset = MDLAsset(
@@ -113,6 +114,57 @@ extension Renderer: MTKViewDelegate {
         renderEncoder.setRenderPipelineState(pipelineState)
 
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+
+        // draw the untransformed object
+        var color: simd_float4 = [0.8, 0.8, 0.8, 1]
+        renderEncoder.setFragmentBytes(
+            &color,
+            length: MemoryLayout<SIMD4<Float>>.stride,
+            index: 0
+        )
+
+        var translation = matrix_float4x4()
+        translation.columns.0 = [1, 0, 0, 0]
+        translation.columns.1 = [0, 1, 0, 0]
+        translation.columns.2 = [0, 0, 1, 0]
+        translation.columns.3 = [0, 0, 0, 1]
+        uniforms.modelMatrix = translation
+        renderEncoder.setVertexBytes(
+            &uniforms,
+            length: MemoryLayout<Uniforms>.stride,
+            index: 11
+        )
+
+        for submesh in mesh.submeshes {
+            renderEncoder.drawIndexedPrimitives(
+                type: .triangle,
+                indexCount: submesh.indexCount,
+                indexType: submesh.indexType,
+                indexBuffer: submesh.indexBuffer.buffer,
+                indexBufferOffset: submesh.indexBuffer.offset
+            )
+        }
+
+        // draw the transformed object
+        color = [1, 0, 0, 1]
+        renderEncoder.setFragmentBytes(
+            &color,
+            length: MemoryLayout<SIMD4<Float>>.stride,
+            index: 0
+        )
+
+        let position = simd_float3(0.3, -0.4, 0)
+        translation.columns.0.x = 5
+        translation.columns.1.y = 5
+        translation.columns.3.x = position.x
+        translation.columns.3.y = position.y
+        translation.columns.3.z = position.z
+        uniforms.modelMatrix = translation
+        renderEncoder.setVertexBytes(
+            &uniforms,
+            length: MemoryLayout<Uniforms>.stride,
+            index: 11
+        )
 
         for submesh in mesh.submeshes {
             renderEncoder.drawIndexedPrimitives(

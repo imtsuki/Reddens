@@ -1,17 +1,25 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#import "Common.h"
 
 struct VertexIn {
     float4 position [[attribute(0)]];
 };
 
-vertex float4 vertex_main(const VertexIn vertex_in [[stage_in]]) {
-    float4 position = vertex_in.position;
-    return position;
+struct VertexOut {
+    float4 position [[position]];
+};
+
+vertex VertexOut vertex_main(const VertexIn vertex_in [[stage_in]], constant Uniforms &uniforms [[buffer(11)]]) {
+    float4 translation = uniforms.modelMatrix * vertex_in.position;
+    VertexOut vertex_out {
+        .position = translation
+    };
+    return vertex_out;
 }
 
 
-fragment float4 fragment_main() {
-    return float4(0, 1, 0, 1);
+fragment float4 fragment_main(constant float4 &color [[buffer(0)]]) {
+    return color;
 }

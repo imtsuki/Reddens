@@ -8,12 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		8490B9CB2850F00500638718 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9CA2850F00500638718 /* AppDelegate.swift */; };
-		8490B9CD2850F00500638718 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9CC2850F00500638718 /* ViewController.swift */; };
+		8490B9CD2850F00500638718 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9CC2850F00500638718 /* ContentViewController.swift */; };
 		8490B9CF2850F00600638718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8490B9CE2850F00600638718 /* Assets.xcassets */; };
 		8490B9D22850F00600638718 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8490B9D02850F00600638718 /* Main.storyboard */; };
 		8490B9DD2850F00600638718 /* ReddensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9DC2850F00600638718 /* ReddensTests.swift */; };
 		8490B9E72850F00600638718 /* ReddensUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9E62850F00600638718 /* ReddensUITests.swift */; };
 		8490B9E92850F00600638718 /* ReddensUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9E82850F00600638718 /* ReddensUITestsLaunchTests.swift */; };
+		8490B9F62856B94F00638718 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9F52856B94F00638718 /* Renderer.swift */; };
+		8490B9F82856BB9600638718 /* Primitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9F72856BB9600638718 /* Primitive.swift */; };
+		8490B9FA2856C26600638718 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9F92856C26600638718 /* Shaders.metal */; };
+		8490B9FE2856C98500638718 /* Donut.usdc in Resources */ = {isa = PBXBuildFile; fileRef = 8490B9FD2856C98500638718 /* Donut.usdc */; };
+		84EE8D632856CEE600DE894E /* train.usd in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D622856CEE600DE894E /* train.usd */; };
+		84EE8D652856D44700DE894E /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D642856D44700DE894E /* Quad.swift */; };
+		84EE8D6B2856E0A800DE894E /* Donut.obj in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6A2856E0A800DE894E /* Donut.obj */; };
+		84EE8D6D2856E0BA00DE894E /* Donut.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6C2856E0BA00DE894E /* Donut.mtl */; };
+		84EE8D6F2856EA9300DE894E /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */; };
+		84EE8D732856F93600DE894E /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D722856F93600DE894E /* MainWindowController.swift */; };
+		84EE8D7528578AB100DE894E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D7428578AB100DE894E /* SidebarView.swift */; };
+		84EE8D77285795D800DE894E /* InspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D76285795D800DE894E /* InspectorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +48,7 @@
 /* Begin PBXFileReference section */
 		8490B9C72850F00500638718 /* Reddens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reddens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8490B9CA2850F00500638718 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8490B9CC2850F00500638718 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8490B9CC2850F00500638718 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		8490B9CE2850F00600638718 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8490B9D12850F00600638718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8490B9D32850F00600638718 /* Reddens.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Reddens.entitlements; sourceTree = "<group>"; };
@@ -45,6 +57,18 @@
 		8490B9E22850F00600638718 /* ReddensUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReddensUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8490B9E62850F00600638718 /* ReddensUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReddensUITests.swift; sourceTree = "<group>"; };
 		8490B9E82850F00600638718 /* ReddensUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReddensUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8490B9F52856B94F00638718 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		8490B9F72856BB9600638718 /* Primitive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitive.swift; sourceTree = "<group>"; };
+		8490B9F92856C26600638718 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		8490B9FD2856C98500638718 /* Donut.usdc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Donut.usdc; sourceTree = "<group>"; };
+		84EE8D622856CEE600DE894E /* train.usd */ = {isa = PBXFileReference; lastKnownFileType = file; path = train.usd; sourceTree = "<group>"; };
+		84EE8D642856D44700DE894E /* Quad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quad.swift; sourceTree = "<group>"; };
+		84EE8D6A2856E0A800DE894E /* Donut.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.obj; sourceTree = "<group>"; };
+		84EE8D6C2856E0BA00DE894E /* Donut.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.mtl; sourceTree = "<group>"; };
+		84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
+		84EE8D722856F93600DE894E /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		84EE8D7428578AB100DE894E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		84EE8D76285795D800DE894E /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +119,11 @@
 		8490B9C92850F00500638718 /* Reddens */ = {
 			isa = PBXGroup;
 			children = (
+				84EE8D7D2857B02300DE894E /* Resources */,
+				84EE8D7C2857AFB800DE894E /* Core */,
+				84EE8D7B2857AF9100DE894E /* Views */,
+				84EE8D7A2857AF8200DE894E /* Controllers */,
 				8490B9CA2850F00500638718 /* AppDelegate.swift */,
-				8490B9CC2850F00500638718 /* ViewController.swift */,
 				8490B9CE2850F00600638718 /* Assets.xcassets */,
 				8490B9D02850F00600638718 /* Main.storyboard */,
 				8490B9D32850F00600638718 /* Reddens.entitlements */,
@@ -119,6 +146,47 @@
 				8490B9E82850F00600638718 /* ReddensUITestsLaunchTests.swift */,
 			);
 			path = ReddensUITests;
+			sourceTree = "<group>";
+		};
+		84EE8D7A2857AF8200DE894E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				84EE8D722856F93600DE894E /* MainWindowController.swift */,
+				8490B9CC2850F00500638718 /* ContentViewController.swift */,
+				84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		84EE8D7B2857AF9100DE894E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84EE8D76285795D800DE894E /* InspectorView.swift */,
+				84EE8D7428578AB100DE894E /* SidebarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		84EE8D7C2857AFB800DE894E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				8490B9F92856C26600638718 /* Shaders.metal */,
+				8490B9F72856BB9600638718 /* Primitive.swift */,
+				84EE8D642856D44700DE894E /* Quad.swift */,
+				8490B9F52856B94F00638718 /* Renderer.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		84EE8D7D2857B02300DE894E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				84EE8D6C2856E0BA00DE894E /* Donut.mtl */,
+				8490B9FD2856C98500638718 /* Donut.usdc */,
+				84EE8D6A2856E0A800DE894E /* Donut.obj */,
+				84EE8D622856CEE600DE894E /* train.usd */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,7 +294,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8490B9CF2850F00600638718 /* Assets.xcassets in Resources */,
+				84EE8D632856CEE600DE894E /* train.usd in Resources */,
+				84EE8D6D2856E0BA00DE894E /* Donut.mtl in Resources */,
+				84EE8D6B2856E0A800DE894E /* Donut.obj in Resources */,
 				8490B9D22850F00600638718 /* Main.storyboard in Resources */,
+				8490B9FE2856C98500638718 /* Donut.usdc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,8 +323,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8490B9CD2850F00500638718 /* ViewController.swift in Sources */,
+				84EE8D77285795D800DE894E /* InspectorView.swift in Sources */,
+				84EE8D652856D44700DE894E /* Quad.swift in Sources */,
+				8490B9CD2850F00500638718 /* ContentViewController.swift in Sources */,
+				8490B9F62856B94F00638718 /* Renderer.swift in Sources */,
+				84EE8D732856F93600DE894E /* MainWindowController.swift in Sources */,
 				8490B9CB2850F00500638718 /* AppDelegate.swift in Sources */,
+				84EE8D7528578AB100DE894E /* SidebarView.swift in Sources */,
+				8490B9F82856BB9600638718 /* Primitive.swift in Sources */,
+				84EE8D6F2856EA9300DE894E /* SidebarViewController.swift in Sources */,
+				8490B9FA2856C26600638718 /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

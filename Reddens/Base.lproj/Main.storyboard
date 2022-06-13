@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="iuM-5w-3NJ">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -32,6 +34,9 @@
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
+                                        </menuItem>
+                                        <menuItem title="Item" id="USW-Mi-cdt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
@@ -673,45 +678,130 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Reddens" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="-585" y="85"/>
         </scene>
         <!--Window Controller-->
-        <scene sceneID="R2V-B0-nI4">
+        <scene sceneID="79c-Ph-dMF">
             <objects>
-                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                <windowController id="iuM-5w-3NJ" customClass="MainWindowController" customModule="Reddens" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Reddens" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="id5-74-8lD">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <rect key="contentRect" x="294" y="1295" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="982" width="1920" height="1080"/>
+                        <view key="contentView" id="Fil-x7-W28">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="YMa-HZ-egk">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="gsr-LO-sE1"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="7Tm-d8-ppa"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="neU-mP-J0T"/>
+                                <toolbarItem implicitItemIdentifier="B490B43E-028E-4875-982E-1C177BDE5836" label="Open" paletteLabel="Open" tag="-1" image="folder.badge.plus" catalog="system" bordered="YES" id="nRi-oK-xb8">
+                                    <size key="minSize" width="30" height="25"/>
+                                    <size key="maxSize" width="30" height="25"/>
+                                    <connections>
+                                        <action selector="openFile:" target="iuM-5w-3NJ" id="QRu-uo-el8"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Myp-Zz-eWu"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="2aL-zo-vNc"/>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="nRi-oK-xb8"/>
+                            </defaultToolbarItems>
+                        </toolbar>
                         <connections>
-                            <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
+                            <outlet property="delegate" destination="iuM-5w-3NJ" id="7sf-Tn-p00"/>
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
+                        <segue destination="vuw-81-Ygj" kind="relationship" relationship="window.shadowedContentViewController" id="Jbv-EU-GHs"/>
                     </connections>
                 </windowController>
-                <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="AmB-KP-DTE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="250"/>
+            <point key="canvasLocation" x="-586" y="329"/>
         </scene>
-        <!--View Controller-->
+        <!--Split View Controller-->
+        <scene sceneID="SSm-0e-NsO">
+            <objects>
+                <splitViewController id="vuw-81-Ygj" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem canCollapse="YES" holdingPriority="260" behavior="sidebar" id="iUc-r4-zB8"/>
+                        <splitViewItem holdingPriority="255" behavior="contentList" id="T2V-T4-MTq"/>
+                    </splitViewItems>
+                    <splitView key="splitView" dividerStyle="thin" vertical="YES" id="ZCL-Di-d41">
+                        <rect key="frame" x="0.0" y="0.0" width="479" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </splitView>
+                    <connections>
+                        <segue destination="11S-zt-B3u" kind="relationship" relationship="splitItems" id="T4G-Mg-F1B"/>
+                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="splitItems" id="A5a-AX-Qhm"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="d9Y-PX-sb4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="19.5" y="336"/>
+        </scene>
+        <!--Sidebar View Controller-->
+        <scene sceneID="g8D-bD-CVp">
+            <objects>
+                <hostingController id="11S-zt-B3u" customClass="SidebarViewController" customModule="Reddens" customModuleProvider="target" sceneMemberID="viewController"/>
+                <customObject id="Auw-bV-Fjy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="878" y="33"/>
+        </scene>
+        <!--Content View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ContentViewController" customModule="Reddens" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KNI-iC-FBL">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="218"/>
+                                <subviews>
+                                    <customView fixedFrame="YES" id="0a3-O9-zHQ" customClass="MTKView">
+                                        <rect key="frame" x="0.0" y="0.0" width="364" height="218"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </customView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" id="s8X-vi-Iqa" customClass="HostedInspectorView" customModule="Reddens" customModuleProvider="target">
+                                        <rect key="frame" x="365" y="0.0" width="115" height="218"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </stackView>
+                                </subviews>
+                                <holdingPriorities>
+                                    <real value="250"/>
+                                    <real value="250"/>
+                                </holdingPriorities>
+                            </splitView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="KNI-iC-FBL" firstAttribute="top" secondItem="RiU-6Z-nMc" secondAttribute="top" id="1Fr-0R-zyo"/>
+                            <constraint firstItem="RiU-6Z-nMc" firstAttribute="bottom" secondItem="KNI-iC-FBL" secondAttribute="bottom" id="fet-qa-i4b"/>
+                            <constraint firstItem="KNI-iC-FBL" firstAttribute="leading" secondItem="RiU-6Z-nMc" secondAttribute="leading" id="jyA-Pi-iZk"/>
+                            <constraint firstItem="RiU-6Z-nMc" firstAttribute="trailing" secondItem="KNI-iC-FBL" secondAttribute="trailing" id="l57-2j-EPx"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="RiU-6Z-nMc"/>
+                        <viewLayoutGuide key="layoutMargins" id="ncQ-d0-rn1"/>
                     </view>
+                    <connections>
+                        <outlet property="metalView" destination="0a3-O9-zHQ" id="12Z-Cj-NWm"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="663" y="469"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="folder.badge.plus" catalog="system" width="19" height="14"/>
+    </resources>
 </document>

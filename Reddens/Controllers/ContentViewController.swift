@@ -11,6 +11,7 @@ class ContentViewController: NSViewController {
         // Do any additional setup after loading the view.
         renderer = Renderer(metalView: metalView)
         NotificationCenter.default.addObserver(self, selector: #selector(openFile), name: Notification.Name("OpenFile"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(inspectorPreferencesChanged), name: Notification.Name("InspectorPreferencesChanged"), object: nil)
     }
 
     override var representedObject: Any? {
@@ -23,6 +24,12 @@ class ContentViewController: NSViewController {
         if let url = notification.userInfo?["url"] as? URL {
             print(url)
             renderer?.loadAsset(url: url)
+        }
+    }
+
+    @objc func inspectorPreferencesChanged(notification: NSNotification) {
+        if let preferences = notification.userInfo?["preferences"] as? InspectorModel.Preferences {
+            renderer?.inspectorPreferences = preferences
         }
     }
 }

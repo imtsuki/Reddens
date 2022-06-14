@@ -3,12 +3,12 @@ import SwiftUI
 import Combine
 
 class SidebarViewController: NSHostingController<SidebarView> {
-    var selectionModel = SelectionModel()
+    var sidebarSelectionModel = SidebarSelectionModel()
     var selectionModelChangeSink: AnyCancellable?
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder, rootView: SidebarView(selectionModel: selectionModel))
-        selectionModelChangeSink = selectionModel.$selectedItem.sink { newItem in
+        super.init(coder: coder, rootView: SidebarView(selectionModel: sidebarSelectionModel))
+        selectionModelChangeSink = sidebarSelectionModel.$selectedItem.sink { newItem in
             print("selected \(newItem)")
         }
     }

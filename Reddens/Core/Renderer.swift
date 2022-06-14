@@ -6,13 +6,38 @@ class Renderer: NSObject {
     static var commandQueue: MTLCommandQueue!
     static var library: MTLLibrary!
 
-    static var defaultVertexDescriptor: MTLVertexDescriptor {
-        let vertexDescriptor = MTLVertexDescriptor()
-        vertexDescriptor.attributes[0].format = .float3
-        vertexDescriptor.attributes[0].offset = 0
-        vertexDescriptor.attributes[0].bufferIndex = 0
-        vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
+    static var defaultMDLVertexDescriptor: MDLVertexDescriptor {
+        let vertexDescriptor = MDLVertexDescriptor()
+        var offset = 0
+        vertexDescriptor.attributes[0] = MDLVertexAttribute(
+            name: MDLVertexAttributePosition,
+            format: .float3,
+            offset: offset,
+            bufferIndex: Int(VertexBufferIndex.rawValue)
+        )
+        offset += MemoryLayout<SIMD3<Float>>.stride
+        vertexDescriptor.attributes[1] = MDLVertexAttribute(
+            name: MDLVertexAttributeNormal,
+            format: .float3,
+            offset: offset,
+            bufferIndex: Int(VertexBufferIndex.rawValue)
+        )
+        offset += MemoryLayout<SIMD3<Float>>.stride
+        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: offset)
+
         return vertexDescriptor
+    }
+
+    static var defaultMTLVertexDescriptor: MTLVertexDescriptor {
+        return MTKMetalVertexDescriptorFromModelIO(defaultMDLVertexDescriptor)!
+    }
+
+    static var depthStencilState: MTLDepthStencilState? {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = .less
+        descriptor.isDepthWriteEnabled = true
+        return Renderer.device.makeDepthStencilState(
+            descriptor: descriptor)
     }
 
     var mesh: MTKMesh!
@@ -20,6 +45,9 @@ class Renderer: NSObject {
     var pipelineState: MTLRenderPipelineState!
 
     var uniforms = Uniforms()
+    var params = Params()
+
+    var inspectorPreferences: InspectorModel.Preferences = InspectorModel.Preferences()
 
     weak var metalView: MTKView!
 
@@ -46,8 +74,9 @@ class Renderer: NSObject {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = vertexFn
         pipelineDescriptor.fragmentFunction = fragmentFn
-        pipelineDescriptor.vertexDescriptor = Renderer.defaultVertexDescriptor
+        pipelineDescriptor.vertexDescriptor = Renderer.defaultMTLVertexDescriptor
         pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
         do {
             pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
         } catch let error {
@@ -59,24 +88,26 @@ class Renderer: NSObject {
 
         // set up the delegate
         metalView.clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+        metalView.depthStencilPixelFormat = .depth32Float
         metalView.delegate = self
     }
 
     func loadAsset(url: URL) {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
 
-        let meshDescriptor = MTKModelIOVertexDescriptorFromMetal(Renderer.defaultVertexDescriptor)
-        (meshDescriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
+        let vertexDescriptor = Renderer.defaultMDLVertexDescriptor
 
         let asset = MDLAsset(
           url: url,
-          vertexDescriptor: meshDescriptor,
+          vertexDescriptor: vertexDescriptor,
           bufferAllocator: allocator)
 
         print("this asset has \(asset.count) object(s).")
 
         // TODO: render multiple objects
         let mdlMesh = asset.childObjects(of: MDLMesh.self).first as! MDLMesh
+
+        mdlMesh.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 1.0)
 
         do {
             mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
@@ -98,6 +129,8 @@ class Renderer: NSObject {
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        params.width = UInt32(size.width)
+        params.height = UInt32(size.height)
     }
 
     func draw(in view: MTKView) {
@@ -109,20 +142,32 @@ extension Renderer: MTKViewDelegate {
         }
 
         // drawing code goes here
-        renderEncoder.setTriangleFillMode(.lines)
+        switch inspectorPreferences.lightingMode {
+        case .normal:
+            params.lightingMode = 0
+        case .hemispheric:
+            params.lightingMode = 1
+        }
+
+        renderEncoder.setDepthStencilState(Renderer.depthStencilState)
+
+        renderEncoder.setTriangleFillMode(inspectorPreferences.triangleFillMode)
 
         renderEncoder.setRenderPipelineState(pipelineState)
 
-        renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-
-        // draw the untransformed object
-        var color: simd_float4 = [0.8, 0.8, 0.8, 1]
-        renderEncoder.setFragmentBytes(
-            &color,
-            length: MemoryLayout<SIMD4<Float>>.stride,
-            index: 0
+        renderEncoder.setVertexBuffer(
+            vertexBuffer,
+            offset: 0,
+            index: Int(VertexBufferIndex.rawValue)
         )
 
+        renderEncoder.setFragmentBytes(
+            &params,
+            length: MemoryLayout<Params>.stride,
+            index: Int(ParamsBufferIndex.rawValue)
+        )
+
+        // draw the untransformed object
         var translation = matrix_float4x4()
         translation.columns.0 = [1, 0, 0, 0]
         translation.columns.1 = [0, 1, 0, 0]
@@ -132,7 +177,7 @@ extension Renderer: MTKViewDelegate {
         renderEncoder.setVertexBytes(
             &uniforms,
             length: MemoryLayout<Uniforms>.stride,
-            index: 11
+            index: Int(UniformsBufferIndex.rawValue)
         )
 
         for submesh in mesh.submeshes {
@@ -146,13 +191,6 @@ extension Renderer: MTKViewDelegate {
         }
 
         // draw the transformed object
-        color = [1, 0, 0, 1]
-        renderEncoder.setFragmentBytes(
-            &color,
-            length: MemoryLayout<SIMD4<Float>>.stride,
-            index: 0
-        )
-
         let position = simd_float3(0.3, -0.4, 0)
         translation.columns.0.x = 5
         translation.columns.1.y = 5
@@ -163,7 +201,7 @@ extension Renderer: MTKViewDelegate {
         renderEncoder.setVertexBytes(
             &uniforms,
             length: MemoryLayout<Uniforms>.stride,
-            index: 11
+            index: Int(UniformsBufferIndex.rawValue)
         )
 
         for submesh in mesh.submeshes {

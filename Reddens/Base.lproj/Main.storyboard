@@ -769,16 +769,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="308"/>
                                 <subviews>
                                     <customView fixedFrame="YES" id="0a3-O9-zHQ" customClass="MTKView">
-                                        <rect key="frame" x="0.0" y="0.0" width="451" height="308"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="398" height="308"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </customView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" id="s8X-vi-Iqa" customClass="HostedInspectorView" customModule="Reddens" customModuleProvider="target">
-                                        <rect key="frame" x="452" y="0.0" width="148" height="308"/>
+                                        <rect key="frame" x="399" y="0.0" width="201" height="308"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </stackView>
                                 </subviews>
                                 <holdingPriorities>
-                                    <real value="250"/>
+                                    <real value="240"/>
                                     <real value="250"/>
                                 </holdingPriorities>
                             </splitView>

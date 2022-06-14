@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SidebarView: View {
-    @ObservedObject var selectionModel: SelectionModel
+    @ObservedObject var selectionModel: SidebarSelectionModel
     @State private var isFlagged = false
     var body: some View {
         List() {
@@ -27,12 +27,12 @@ enum SidebarItem: Hashable {
     case settings
 }
 
-class SelectionModel: ObservableObject {
+class SidebarSelectionModel: ObservableObject {
     @Published var selectedItem: SidebarItem = .home
 }
 
 struct SidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarView(selectionModel: SelectionModel())
+        SidebarView(selectionModel: SidebarSelectionModel())
     }
 }

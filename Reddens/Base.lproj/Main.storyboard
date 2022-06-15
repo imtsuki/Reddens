@@ -768,7 +768,7 @@
                             <splitView arrangesAllSubviews="NO" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KNI-iC-FBL">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="308"/>
                                 <subviews>
-                                    <customView fixedFrame="YES" id="0a3-O9-zHQ" customClass="MTKView">
+                                    <customView fixedFrame="YES" id="0a3-O9-zHQ" customClass="MetalView" customModule="Reddens" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="398" height="308"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </customView>
@@ -793,7 +793,7 @@
                         <viewLayoutGuide key="layoutMargins" id="ncQ-d0-rn1"/>
                     </view>
                     <connections>
-                        <outlet property="metalView" destination="0a3-O9-zHQ" id="12Z-Cj-NWm"/>
+                        <outlet property="metalView" destination="0a3-O9-zHQ" id="XVF-M0-TQH"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

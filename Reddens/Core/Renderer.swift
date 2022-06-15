@@ -51,9 +51,7 @@ class Renderer: NSObject {
 
     var inspectorPreferences: InspectorModel.Preferences = InspectorModel.Preferences()
 
-    weak var metalView: MTKView!
-
-    init(metalView: MTKView) {
+    init(mtkView: MTKView) {
         super.init()
 
         // initialize the GPU and create the command queue
@@ -63,7 +61,7 @@ class Renderer: NSObject {
         }
         Renderer.device = device
         Renderer.commandQueue = commandQueue
-        metalView.device = device
+        mtkView.device = device
 
         // set up the MTLLibrary and ensure that the vertex and fragment shader functions are present.
         let library = device.makeDefaultLibrary()
@@ -77,7 +75,7 @@ class Renderer: NSObject {
         pipelineDescriptor.vertexFunction = vertexFn
         pipelineDescriptor.fragmentFunction = fragmentFn
         pipelineDescriptor.vertexDescriptor = Renderer.defaultMTLVertexDescriptor
-        pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
+        pipelineDescriptor.colorAttachments[0].pixelFormat = mtkView.colorPixelFormat
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
         do {
             pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -89,9 +87,9 @@ class Renderer: NSObject {
         loadDefaultAsset()
 
         // set up the delegate
-        metalView.clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
-        metalView.depthStencilPixelFormat = .depth32Float
-        metalView.delegate = self
+        mtkView.clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+        mtkView.depthStencilPixelFormat = .depth32Float
+        mtkView.delegate = self
     }
 
     func loadAsset(url: URL) {

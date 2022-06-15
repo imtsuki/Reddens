@@ -40,9 +40,8 @@ class Renderer: NSObject {
             descriptor: descriptor)
     }
 
-    var mesh: MTKMesh!
-    var vertexBuffer: MTLBuffer!
     var pipelineState: MTLRenderPipelineState!
+    var model: Model?
 
     var uniforms = Uniforms()
     var params = Params()
@@ -83,8 +82,8 @@ class Renderer: NSObject {
             fatalError(error.localizedDescription)
         }
 
-        // set up the default mesh
-        loadDefaultAsset()
+        // load the default model
+        model = loadDefaultAsset()
 
         // set up the delegate
         mtkView.clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
@@ -92,7 +91,7 @@ class Renderer: NSObject {
         mtkView.delegate = self
     }
 
-    func loadAsset(url: URL) {
+    func loadAsset(url: URL) -> Model {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
 
         let vertexDescriptor = Renderer.defaultMDLVertexDescriptor
@@ -102,28 +101,14 @@ class Renderer: NSObject {
           vertexDescriptor: vertexDescriptor,
           bufferAllocator: allocator)
 
-        print("this asset has \(asset.count) object(s).")
-
-        // TODO: render multiple objects
-        let mdlMesh = asset.childObjects(of: MDLMesh.self).first as! MDLMesh
-
-        mdlMesh.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 1.0)
-
-        do {
-            mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
-        } catch let error {
-            print(error.localizedDescription)
-        }
-
-        // set up the MTLBuffer that contains the vertex data
-        vertexBuffer = mesh.vertexBuffers[0].buffer
+        return Model(asset: asset)
     }
 
-    func loadDefaultAsset() {
+    func loadDefaultAsset() -> Model {
         guard let assetURL = Bundle.main.url(forResource: "Donut", withExtension: "obj") else {
             fatalError()
         }
-        loadAsset(url: assetURL)
+        return loadAsset(url: assetURL)
     }
 }
 
@@ -149,31 +134,12 @@ extension Renderer: MTKViewDelegate {
             return
         }
 
-        // drawing code goes here
         switch inspectorPreferences.lightingMode {
         case .normal:
             params.lightingMode = 0
         case .hemispheric:
             params.lightingMode = 1
         }
-
-        renderEncoder.setDepthStencilState(Renderer.depthStencilState)
-
-        renderEncoder.setTriangleFillMode(inspectorPreferences.triangleFillMode)
-
-        renderEncoder.setRenderPipelineState(pipelineState)
-
-        renderEncoder.setVertexBuffer(
-            vertexBuffer,
-            offset: 0,
-            index: Int(VertexBufferIndex.rawValue)
-        )
-
-        renderEncoder.setFragmentBytes(
-            &params,
-            length: MemoryLayout<Params>.stride,
-            index: Int(ParamsBufferIndex.rawValue)
-        )
 
         timer += 0.005
 
@@ -185,25 +151,18 @@ extension Renderer: MTKViewDelegate {
         // scaling first, rotation next, translation last
         uniforms.modelMatrix = translationMatrix * rotationMatrix * scalingMatrix
 
-        // draw the transformed object
-        renderEncoder.setVertexBytes(
-            &uniforms,
-            length: MemoryLayout<Uniforms>.stride,
-            index: Int(UniformsBufferIndex.rawValue)
-        )
+        // MARK: Start of drawing code
+        renderEncoder.setDepthStencilState(Renderer.depthStencilState)
 
-        for submesh in mesh.submeshes {
-            renderEncoder.drawIndexedPrimitives(
-                type: .triangle,
-                indexCount: submesh.indexCount,
-                indexType: submesh.indexType,
-                indexBuffer: submesh.indexBuffer.buffer,
-                indexBufferOffset: submesh.indexBuffer.offset
-            )
-        }
-        // deawing code ends here
+        renderEncoder.setTriangleFillMode(inspectorPreferences.triangleFillMode)
 
+        renderEncoder.setRenderPipelineState(pipelineState)
+
+        model?.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+
+        // MARK: End of drawing code
         renderEncoder.endEncoding()
+
         guard let drawable = view.currentDrawable else {
             return
         }

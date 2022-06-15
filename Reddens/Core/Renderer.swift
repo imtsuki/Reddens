@@ -47,6 +47,8 @@ class Renderer: NSObject {
     var uniforms = Uniforms()
     var params = Params()
 
+    var timer: Float = 0
+
     var inspectorPreferences: InspectorModel.Preferences = InspectorModel.Preferences()
 
     weak var metalView: MTKView!
@@ -131,6 +133,14 @@ extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         params.width = UInt32(size.width)
         params.height = UInt32(size.height)
+        let aspectRatio = size.width / size.height
+
+        let projectionMatrix = float4x4(
+            projectionFov: 45 / 180 * Float.pi, near: 0.1,
+            far: 100,
+            aspectRatio: Float(aspectRatio))
+
+        uniforms.projectionMatrix = projectionMatrix
     }
 
     func draw(in view: MTKView) {
@@ -167,37 +177,17 @@ extension Renderer: MTKViewDelegate {
             index: Int(ParamsBufferIndex.rawValue)
         )
 
-        // draw the untransformed object
-        var translation = matrix_float4x4()
-        translation.columns.0 = [1, 0, 0, 0]
-        translation.columns.1 = [0, 1, 0, 0]
-        translation.columns.2 = [0, 0, 1, 0]
-        translation.columns.3 = [0, 0, 0, 1]
-        uniforms.modelMatrix = translation
-        renderEncoder.setVertexBytes(
-            &uniforms,
-            length: MemoryLayout<Uniforms>.stride,
-            index: Int(UniformsBufferIndex.rawValue)
-        )
+        timer += 0.005
 
-        for submesh in mesh.submeshes {
-            renderEncoder.drawIndexedPrimitives(
-                type: .triangle,
-                indexCount: submesh.indexCount,
-                indexType: submesh.indexType,
-                indexBuffer: submesh.indexBuffer.buffer,
-                indexBufferOffset: submesh.indexBuffer.offset
-            )
-        }
+        uniforms.viewMatrix = float4x4(translation: [0, 0, 0]).inverse
+
+        let translationMatrix = float4x4(translation: [0, 0, 2])
+        let rotationMatrix = float4x4(rotationX: sin(timer) / 2 - 0.5)
+        let scalingMatrix = float4x4(scaling: [inspectorPreferences.modelScaling, inspectorPreferences.modelScaling, inspectorPreferences.modelScaling])
+        // scaling first, rotation next, translation last
+        uniforms.modelMatrix = translationMatrix * rotationMatrix * scalingMatrix
 
         // draw the transformed object
-        let position = simd_float3(0.3, -0.4, 0)
-        translation.columns.0.x = 5
-        translation.columns.1.y = 5
-        translation.columns.3.x = position.x
-        translation.columns.3.y = position.y
-        translation.columns.3.z = position.z
-        uniforms.modelMatrix = translation
         renderEncoder.setVertexBytes(
             &uniforms,
             length: MemoryLayout<Uniforms>.stride,

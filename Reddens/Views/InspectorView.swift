@@ -9,6 +9,11 @@ struct InspectorView: View {
         List {
             Text("Inspector")
                 .font(.headline)
+            GroupBox(label: Text("Viewing Options")) {
+                Slider(value: $inspectorModel.preferences.modelScaling, in: 0.1...10) {
+                    Text("Scaling")
+                }
+            }
 
             GroupBox(label: Text("Rendering Options")) {
                 Picker("Fill mode", selection: $inspectorModel.preferences.triangleFillMode) {
@@ -28,13 +33,17 @@ struct InspectorView: View {
 
 class InspectorModel: ObservableObject {
     struct Preferences {
-        var triangleFillMode: MTLTriangleFillMode = .fill
-        var lightingMode: LightingMode = .hemispheric
+        // MARK: Viewing Options
+        var modelScaling: Float = 5.0
 
+        // MARK: Rendering Options
         enum LightingMode {
             case normal
             case hemispheric
         }
+
+        var triangleFillMode: MTLTriangleFillMode = .fill
+        var lightingMode: LightingMode = .hemispheric
     }
     @Published var preferences: Preferences = Preferences()
 }

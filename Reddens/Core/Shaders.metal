@@ -17,7 +17,7 @@ vertex VertexOut vertex_main(
                              const VertexIn vertex_in [[stage_in]],
                              constant Uniforms &uniforms [[buffer(UniformsBufferIndex)]]
 ) {
-    float4 translation = uniforms.modelMatrix * vertex_in.position;
+    float4 translation = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * vertex_in.position;
     VertexOut vertex_out {
         .position = translation,
         .normal = vertex_in.normal

@@ -10,7 +10,7 @@ struct InspectorView: View {
             Text("Inspector")
                 .font(.headline)
             GroupBox(label: Text("Viewing Options")) {
-                Slider(value: $inspectorModel.preferences.modelScaling, in: 0.1...10) {
+                Slider(value: $inspectorModel.preferences.modelScaling, in: -1...1) {
                     Text("Scaling")
                 }
 
@@ -46,7 +46,7 @@ struct InspectorView: View {
 class InspectorModel: ObservableObject {
     struct Preferences {
         // MARK: Viewing Options
-        var modelScaling: Float = 5.0
+        var modelScaling: Float = 0
         var rotationX: Float = 0
         var rotationY: Float = 0
         var rotationZ: Float = 0

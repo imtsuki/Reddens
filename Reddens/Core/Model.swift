@@ -5,11 +5,8 @@ class Model {
     var meshes: [MTKMesh] = []
 
     init(asset: MDLAsset) {
-        let mdlMeshes = try! MTKMesh.newMeshes(asset: asset, device: Renderer.device).modelIOMeshes
-        print("asset \(asset.url?.lastPathComponent ?? "") has \(mdlMeshes.count) mesh(es).")
-        // TODO: do not generate normals if the model already contains normals data
-        mdlMeshes.forEach({ $0.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 0.1) })
-        let mtkMeshes = mdlMeshes.map({ try! MTKMesh(mesh: $0, device: Renderer.device) })
+        let mtkMeshes = try! MTKMesh.newMeshes(asset: asset, device: Renderer.device).metalKitMeshes
+        print("asset \(String(reflecting: asset.url?.lastPathComponent ?? "")) has \(mtkMeshes.count) mesh(es).")
         meshes = mtkMeshes
     }
 

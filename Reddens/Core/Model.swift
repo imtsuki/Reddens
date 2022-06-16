@@ -2,24 +2,15 @@ import Foundation
 import MetalKit
 
 class Model {
-    var mesh: MTKMesh!
-    var vertexBuffer: MTLBuffer!
+    var meshes: [MTKMesh] = []
 
     init(asset: MDLAsset) {
-        print("asset \(String(describing: asset.url?.lastPathComponent)) has \(asset.count) object(s).")
-
-        // TODO: render multiple objects
-        let mdlMesh = asset.childObjects(of: MDLMesh.self).first as! MDLMesh
-        mdlMesh.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 1.0)
-
-        do {
-            mesh = try MTKMesh(mesh: mdlMesh, device: Renderer.device)
-        } catch let error {
-            print(error.localizedDescription)
-        }
-
-        // set up the MTLBuffer that contains the vertex data
-        vertexBuffer = mesh.vertexBuffers[0].buffer
+        let mdlMeshes = try! MTKMesh.newMeshes(asset: asset, device: Renderer.device).modelIOMeshes
+        print("asset \(asset.url?.lastPathComponent ?? "") has \(mdlMeshes.count) mesh(es).")
+        // TODO: do not generate normals if the model already contains normals data
+        mdlMeshes.forEach({ $0.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 0.1) })
+        let mtkMeshes = mdlMeshes.map({ try! MTKMesh(mesh: $0, device: Renderer.device) })
+        meshes = mtkMeshes
     }
 
     func render(
@@ -30,33 +21,35 @@ class Model {
         var uniforms = vertex
         var params = fragment
 
-        encoder.setVertexBuffer(
-            vertexBuffer,
-            offset: 0,
-            index: Int(VertexBufferIndex.rawValue)
-        )
-
-        encoder.setVertexBytes(
-            &uniforms,
-            length: MemoryLayout<Uniforms>.stride,
-            index: Int(UniformsBufferIndex.rawValue)
-        )
-
-        encoder.setFragmentBytes(
-            &params,
-            length: MemoryLayout<Params>.stride,
-            index: Int(ParamsBufferIndex.rawValue)
-        )
-
-        // draw the transformed object
-        for submesh in mesh.submeshes {
-            encoder.drawIndexedPrimitives(
-                type: .triangle,
-                indexCount: submesh.indexCount,
-                indexType: submesh.indexType,
-                indexBuffer: submesh.indexBuffer.buffer,
-                indexBufferOffset: submesh.indexBuffer.offset
+        for mesh in meshes {
+            encoder.setVertexBuffer(
+                mesh.vertexBuffers[0].buffer,
+                offset: 0,
+                index: Int(VertexBufferIndex.rawValue)
             )
+
+            encoder.setVertexBytes(
+                &uniforms,
+                length: MemoryLayout<Uniforms>.stride,
+                index: Int(UniformsBufferIndex.rawValue)
+            )
+
+            encoder.setFragmentBytes(
+                &params,
+                length: MemoryLayout<Params>.stride,
+                index: Int(ParamsBufferIndex.rawValue)
+            )
+
+            // draw the transformed object
+            for submesh in mesh.submeshes {
+                encoder.drawIndexedPrimitives(
+                    type: .triangle,
+                    indexCount: submesh.indexCount,
+                    indexType: submesh.indexType,
+                    indexBuffer: submesh.indexBuffer.buffer,
+                    indexBufferOffset: submesh.indexBuffer.offset
+                )
+            }
         }
     }
 }

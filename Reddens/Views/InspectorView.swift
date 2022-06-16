@@ -13,6 +13,18 @@ struct InspectorView: View {
                 Slider(value: $inspectorModel.preferences.modelScaling, in: 0.1...10) {
                     Text("Scaling")
                 }
+
+                Slider(value: $inspectorModel.preferences.rotationX, in: 0...2 * Float.pi) {
+                    Text("X")
+                }
+
+                Slider(value: $inspectorModel.preferences.rotationY, in: 0...2 * Float.pi) {
+                    Text("Y")
+                }
+
+                Slider(value: $inspectorModel.preferences.rotationZ, in: 0...2 * Float.pi) {
+                    Text("Z")
+                }
             }
 
             GroupBox(label: Text("Rendering Options")) {
@@ -35,6 +47,9 @@ class InspectorModel: ObservableObject {
     struct Preferences {
         // MARK: Viewing Options
         var modelScaling: Float = 5.0
+        var rotationX: Float = 0
+        var rotationY: Float = 0
+        var rotationZ: Float = 0
 
         // MARK: Rendering Options
         enum LightingMode {

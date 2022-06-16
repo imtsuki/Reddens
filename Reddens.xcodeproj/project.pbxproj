@@ -19,7 +19,6 @@
 		8490B9FA2856C26600638718 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9F92856C26600638718 /* Shaders.metal */; };
 		8490B9FE2856C98500638718 /* Donut.usdc in Resources */ = {isa = PBXBuildFile; fileRef = 8490B9FD2856C98500638718 /* Donut.usdc */; };
 		84EE8D632856CEE600DE894E /* train.usd in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D622856CEE600DE894E /* train.usd */; };
-		84EE8D652856D44700DE894E /* Quad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D642856D44700DE894E /* Quad.swift */; };
 		84EE8D6B2856E0A800DE894E /* Donut.obj in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6A2856E0A800DE894E /* Donut.obj */; };
 		84EE8D6D2856E0BA00DE894E /* Donut.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6C2856E0BA00DE894E /* Donut.mtl */; };
 		84EE8D6F2856EA9300DE894E /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */; };
@@ -65,7 +64,6 @@
 		8490B9F92856C26600638718 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		8490B9FD2856C98500638718 /* Donut.usdc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Donut.usdc; sourceTree = "<group>"; };
 		84EE8D622856CEE600DE894E /* train.usd */ = {isa = PBXFileReference; lastKnownFileType = file; path = train.usd; sourceTree = "<group>"; };
-		84EE8D642856D44700DE894E /* Quad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quad.swift; sourceTree = "<group>"; };
 		84EE8D6A2856E0A800DE894E /* Donut.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.obj; sourceTree = "<group>"; };
 		84EE8D6C2856E0BA00DE894E /* Donut.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.mtl; sourceTree = "<group>"; };
 		84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 				8490B9F92856C26600638718 /* Shaders.metal */,
 				8490B9F72856BB9600638718 /* Primitive.swift */,
 				84EE8D83285A9EFC00DE894E /* Model.swift */,
-				84EE8D642856D44700DE894E /* Quad.swift */,
 				8490B9F52856B94F00638718 /* Renderer.swift */,
 				84EE8D7F28593C9700DE894E /* Math.swift */,
 				84EE8D7E2857CDEC00DE894E /* Common.h */,
@@ -336,7 +333,6 @@
 			files = (
 				84EE8D8228598D5700DE894E /* MetalView.swift in Sources */,
 				84EE8D77285795D800DE894E /* InspectorView.swift in Sources */,
-				84EE8D652856D44700DE894E /* Quad.swift in Sources */,
 				84EE8D8028593C9700DE894E /* Math.swift in Sources */,
 				8490B9CD2850F00500638718 /* ContentViewController.swift in Sources */,
 				8490B9F62856B94F00638718 /* Renderer.swift in Sources */,

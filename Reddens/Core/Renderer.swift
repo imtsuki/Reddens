@@ -46,8 +46,6 @@ class Renderer: NSObject {
     var uniforms = Uniforms()
     var params = Params()
 
-    var timer: Float = 0
-
     var inspectorPreferences: InspectorModel.Preferences = InspectorModel.Preferences()
 
     init(mtkView: MTKView) {
@@ -83,7 +81,7 @@ class Renderer: NSObject {
         }
 
         // load the default model
-        model = loadDefaultAsset()
+        loadDefaultAsset()
 
         // set up the delegate
         mtkView.clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
@@ -91,7 +89,7 @@ class Renderer: NSObject {
         mtkView.delegate = self
     }
 
-    func loadAsset(url: URL) -> Model {
+    func loadAsset(url: URL) {
         let allocator = MTKMeshBufferAllocator(device: Renderer.device)
 
         let vertexDescriptor = Renderer.defaultMDLVertexDescriptor
@@ -101,14 +99,14 @@ class Renderer: NSObject {
           vertexDescriptor: vertexDescriptor,
           bufferAllocator: allocator)
 
-        return Model(asset: asset)
+        model = Model(asset: asset)
     }
 
-    func loadDefaultAsset() -> Model {
+    func loadDefaultAsset() {
         guard let assetURL = Bundle.main.url(forResource: "Donut", withExtension: "obj") else {
             fatalError()
         }
-        return loadAsset(url: assetURL)
+        loadAsset(url: assetURL)
     }
 }
 
@@ -141,15 +139,13 @@ extension Renderer: MTKViewDelegate {
             params.lightingMode = 1
         }
 
-        timer += 0.005
+        // scaling -> rotation -> translation
+        let translationMatrix = float4x4(translation: [0, 0, 2])
+        let rotationMatrix = float4x4(rotation: [inspectorPreferences.rotationX, inspectorPreferences.rotationY, inspectorPreferences.rotationZ])
+        let scalingMatrix = float4x4(scaling: [inspectorPreferences.modelScaling, inspectorPreferences.modelScaling, inspectorPreferences.modelScaling])
+        uniforms.modelMatrix = translationMatrix * rotationMatrix * scalingMatrix
 
         uniforms.viewMatrix = float4x4(translation: [0, 0, 0]).inverse
-
-        let translationMatrix = float4x4(translation: [0, 0, 2])
-        let rotationMatrix = float4x4(rotationX: sin(timer) / 2 - 0.5)
-        let scalingMatrix = float4x4(scaling: [inspectorPreferences.modelScaling, inspectorPreferences.modelScaling, inspectorPreferences.modelScaling])
-        // scaling first, rotation next, translation last
-        uniforms.modelMatrix = translationMatrix * rotationMatrix * scalingMatrix
 
         // MARK: Start of drawing code
         renderEncoder.setDepthStencilState(Renderer.depthStencilState)

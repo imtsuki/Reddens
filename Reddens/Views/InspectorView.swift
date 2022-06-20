@@ -7,33 +7,55 @@ struct InspectorView: View {
     @ObservedObject var inspectorModel: InspectorModel
     var body: some View {
         List {
-            Text("Inspector")
-                .font(.headline)
-            GroupBox(label: Text("Viewing Options")) {
-                Slider(value: $inspectorModel.preferences.modelScaling, in: -1...1) {
+            Group {
+                Text("Viewing Options")
+                    .font(.headline)
+
+                Slider(value: $inspectorModel.preferences.modelScaling, in: -3...1) {
                     Text("Scaling")
                 }
 
-                Slider(value: $inspectorModel.preferences.rotationX, in: 0...2 * Float.pi) {
-                    Text("X")
+                Divider()
+
+                Group {
+                    Slider(value: $inspectorModel.preferences.rotationX, in: 0...2 * Float.pi) {
+                        Text("X")
+                    }
+
+                    Slider(value: $inspectorModel.preferences.rotationY, in: 0...2 * Float.pi) {
+                        Text("Y")
+                    }
+
+                    Slider(value: $inspectorModel.preferences.rotationZ, in: 0...2 * Float.pi) {
+                        Text("Z")
+                    }
                 }
 
-                Slider(value: $inspectorModel.preferences.rotationY, in: 0...2 * Float.pi) {
-                    Text("Y")
-                }
+                Divider()
 
-                Slider(value: $inspectorModel.preferences.rotationZ, in: 0...2 * Float.pi) {
-                    Text("Z")
+                Group {
+                    Slider(value: $inspectorModel.preferences.translationX, in: -1...1) {
+                        Image(systemName: "arrow.left.and.right")
+                    }
+
+                    Slider(value: $inspectorModel.preferences.translationY, in: -1...1) {
+                        Image(systemName: "arrow.up.and.down")
+                    }
                 }
             }
 
-            GroupBox(label: Text("Rendering Options")) {
+            Divider()
+
+            Group {
+                Text("Rendering Options")
+                    .font(.headline)
+
                 Picker("Fill mode", selection: $inspectorModel.preferences.triangleFillMode) {
                     Text("Lines").tag(MTLTriangleFillMode.lines)
                     Text("Fill").tag(MTLTriangleFillMode.fill)
                 }
 
-                Picker("Lighting mode", selection: $inspectorModel.preferences.lightingMode) {
+                Picker("Lighting", selection: $inspectorModel.preferences.lightingMode) {
                     Text("Normal").tag(InspectorModel.Preferences.LightingMode.normal)
                     Text("Hemispheric").tag(InspectorModel.Preferences.LightingMode.hemispheric)
                 }
@@ -50,6 +72,8 @@ class InspectorModel: ObservableObject {
         var rotationX: Float = 0
         var rotationY: Float = 0
         var rotationZ: Float = 0
+        var translationX: Float = 0
+        var translationY: Float = 0
 
         // MARK: Rendering Options
         enum LightingMode {

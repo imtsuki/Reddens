@@ -28,11 +28,12 @@ vertex VertexOut vertex_main(
 
 fragment float4 fragment_main(
                               VertexOut vertex_in [[stage_in]],
-                              constant Params &params [[buffer(ParamsBufferIndex)]]
+                              constant Params &params [[buffer(ParamsBufferIndex)]],
+                              constant float3 &base_color [[buffer(BaseColorIndex)]]
 ) {
     if (params.lightingMode == 1) {
-        float4 sky = float4(0.34, 0.9, 1.0, 1.0);
-        float4 earth = float4(0.29, 0.58, 0.2, 1.0);
+        float4 sky = float4(base_color, 1.0);
+        float4 earth = float4(base_color * 0.5, 1.0);
         float intensity = vertex_in.normal.y * 0.5 + 0.5;
         return mix(earth, sky, intensity);
     } else {

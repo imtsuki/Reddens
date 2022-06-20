@@ -1,13 +1,63 @@
 import Foundation
 import MetalKit
 
+struct Mesh {
+    let mdlMesh: MDLMesh
+    let mtkMesh: MTKMesh
+    var submeshes: [Submesh] = []
+
+    var vertexBuffers: [MTKMeshBuffer] {
+        return mtkMesh.vertexBuffers
+    }
+
+    init(mdlMesh: MDLMesh, mtkMesh: MTKMesh) {
+        self.mdlMesh = mdlMesh
+        self.mtkMesh = mtkMesh
+        for (mdlSubmesh, mtkSubmesh) in zip(mdlMesh.submeshes!, mtkMesh.submeshes) {
+            submeshes.append(Submesh(mdlSubmesh: mdlSubmesh as! MDLSubmesh, mtkSubmesh: mtkSubmesh))
+        }
+    }
+}
+
+struct Submesh {
+    let mdlSubmesh: MDLSubmesh
+    let mtkSubmesh: MTKSubmesh
+    let baseColor: SIMD3<Float>
+
+    var indexCount: Int {
+        return mtkSubmesh.indexCount
+    }
+
+    var indexType: MTLIndexType {
+        return mtkSubmesh.indexType
+    }
+
+    var indexBuffer: MTKMeshBuffer {
+        return mtkSubmesh.indexBuffer
+    }
+
+    init(mdlSubmesh: MDLSubmesh, mtkSubmesh: MTKSubmesh) {
+        self.mdlSubmesh = mdlSubmesh
+        self.mtkSubmesh = mtkSubmesh
+        if let baseColorProperty = mdlSubmesh.material?.property(with: .baseColor),
+           baseColorProperty.type == .float3 {
+            baseColor = baseColorProperty.float3Value
+        } else {
+            baseColor = [1, 0, 0]
+        }
+    }
+}
+
 class Model {
-    var meshes: [MTKMesh] = []
+    var meshes: [Mesh] = []
 
     init(asset: MDLAsset) {
-        let mtkMeshes = try! MTKMesh.newMeshes(asset: asset, device: Renderer.device).metalKitMeshes
-        print("asset \(String(reflecting: asset.url?.lastPathComponent ?? "")) has \(mtkMeshes.count) mesh(es).")
-        meshes = mtkMeshes
+        asset.loadTextures()
+        let (mdlMeshes, mtkMeshes) = try! MTKMesh.newMeshes(asset: asset, device: Renderer.device)
+        for (mdlMesh, mtkMesh) in zip(mdlMeshes, mtkMeshes) {
+            meshes.append(Mesh(mdlMesh: mdlMesh, mtkMesh: mtkMesh))
+        }
+        print("asset \(String(reflecting: asset.url?.lastPathComponent ?? "")) has \(meshes.count) mesh(es).")
     }
 
     func render(
@@ -39,6 +89,12 @@ class Model {
 
             // draw the transformed object
             for submesh in mesh.submeshes {
+                var baseColor = submesh.baseColor;
+                encoder.setFragmentBytes(
+                    &baseColor,
+                    length: MemoryLayout<SIMD3<Float>>.stride,
+                    index: Int(BaseColorIndex.rawValue)
+                )
                 encoder.drawIndexedPrimitives(
                     type: .triangle,
                     indexCount: submesh.indexCount,

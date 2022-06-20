@@ -19,6 +19,7 @@ typedef enum {
     VertexBufferIndex = 0,
     UniformsBufferIndex = 11,
     ParamsBufferIndex = 12,
+    BaseColorIndex = 13
 } BufferIndices;
 
 #endif /* Common_h */

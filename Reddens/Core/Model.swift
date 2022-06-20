@@ -1,52 +1,4 @@
-import Foundation
 import MetalKit
-
-struct Mesh {
-    let mdlMesh: MDLMesh
-    let mtkMesh: MTKMesh
-    var submeshes: [Submesh] = []
-
-    var vertexBuffers: [MTKMeshBuffer] {
-        return mtkMesh.vertexBuffers
-    }
-
-    init(mdlMesh: MDLMesh, mtkMesh: MTKMesh) {
-        self.mdlMesh = mdlMesh
-        self.mtkMesh = mtkMesh
-        for (mdlSubmesh, mtkSubmesh) in zip(mdlMesh.submeshes!, mtkMesh.submeshes) {
-            submeshes.append(Submesh(mdlSubmesh: mdlSubmesh as! MDLSubmesh, mtkSubmesh: mtkSubmesh))
-        }
-    }
-}
-
-struct Submesh {
-    let mdlSubmesh: MDLSubmesh
-    let mtkSubmesh: MTKSubmesh
-    let baseColor: SIMD3<Float>
-
-    var indexCount: Int {
-        return mtkSubmesh.indexCount
-    }
-
-    var indexType: MTLIndexType {
-        return mtkSubmesh.indexType
-    }
-
-    var indexBuffer: MTKMeshBuffer {
-        return mtkSubmesh.indexBuffer
-    }
-
-    init(mdlSubmesh: MDLSubmesh, mtkSubmesh: MTKSubmesh) {
-        self.mdlSubmesh = mdlSubmesh
-        self.mtkSubmesh = mtkSubmesh
-        if let baseColorProperty = mdlSubmesh.material?.property(with: .baseColor),
-           baseColorProperty.type == .float3 {
-            baseColor = baseColorProperty.float3Value
-        } else {
-            baseColor = [1, 0, 0]
-        }
-    }
-}
 
 class Model {
     var meshes: [Mesh] = []
@@ -69,32 +21,33 @@ class Model {
         var params = fragment
 
         for mesh in meshes {
-            encoder.setVertexBuffer(
-                mesh.vertexBuffers[0].buffer,
-                offset: 0,
-                index: Int(VertexBufferIndex.rawValue)
-            )
+            for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
+                encoder.setVertexBuffer(
+                    vertexBuffer.buffer,
+                    offset: 0,
+                    index: index
+                )
+            }
 
             encoder.setVertexBytes(
                 &uniforms,
                 length: MemoryLayout<Uniforms>.stride,
-                index: Int(UniformsBufferIndex.rawValue)
+                index: UniformsBufferIndex.index
             )
 
             encoder.setFragmentBytes(
                 &params,
                 length: MemoryLayout<Params>.stride,
-                index: Int(ParamsBufferIndex.rawValue)
+                index: ParamsBufferIndex.index
             )
 
             // draw the transformed object
             for submesh in mesh.submeshes {
-                var baseColor = submesh.baseColor;
-                encoder.setFragmentBytes(
-                    &baseColor,
-                    length: MemoryLayout<SIMD3<Float>>.stride,
-                    index: Int(BaseColorIndex.rawValue)
+                encoder.setFragmentTexture(
+                    submesh.texture.baseColor,
+                    index: BaseColorIndex.index
                 )
+
                 encoder.drawIndexedPrimitives(
                     type: .triangle,
                     indexCount: submesh.indexCount,

@@ -5,25 +5,39 @@ class Renderer: NSObject {
     static var device: MTLDevice!
     static var commandQueue: MTLCommandQueue!
     static var library: MTLLibrary!
+    static var textureLoader: MTKTextureLoader!
 
     static var defaultMDLVertexDescriptor: MDLVertexDescriptor {
         let vertexDescriptor = MDLVertexDescriptor()
         var offset = 0
-        vertexDescriptor.attributes[0] = MDLVertexAttribute(
+        vertexDescriptor.attributes[VertexAttributePosition.index] = MDLVertexAttribute(
             name: MDLVertexAttributePosition,
             format: .float3,
             offset: offset,
-            bufferIndex: Int(VertexBufferIndex.rawValue)
+            bufferIndex: VertexBufferIndex.index
         )
         offset += MemoryLayout<SIMD3<Float>>.stride
-        vertexDescriptor.attributes[1] = MDLVertexAttribute(
+        vertexDescriptor.attributes[VertexAttributeNormal.index] = MDLVertexAttribute(
             name: MDLVertexAttributeNormal,
             format: .float3,
             offset: offset,
-            bufferIndex: Int(VertexBufferIndex.rawValue)
+            bufferIndex: VertexBufferIndex.index
         )
         offset += MemoryLayout<SIMD3<Float>>.stride
-        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: offset)
+        vertexDescriptor.layouts[VertexBufferIndex.index] = MDLVertexBufferLayout(stride: offset)
+
+        // store UV in a separate buffer
+
+        offset = 0
+
+        vertexDescriptor.attributes[VertexAttributeUV.index] = MDLVertexAttribute(
+            name: MDLVertexAttributeTextureCoordinate,
+            format: .float2,
+            offset: offset,
+            bufferIndex: UVBufferIndex.index
+        )
+        offset += MemoryLayout<SIMD2<Float>>.stride
+        vertexDescriptor.layouts[UVBufferIndex.index] = MDLVertexBufferLayout(stride: offset)
 
         return vertexDescriptor
     }
@@ -66,6 +80,8 @@ class Renderer: NSObject {
 
         let vertexFn = library?.makeFunction(name: "vertex_main")
         let fragmentFn = library?.makeFunction(name: "fragment_main")
+
+        Renderer.textureLoader = MTKTextureLoader(device: device)
 
         // create the pipeline state (expensive, one-time setup)
         let pipelineDescriptor = MTLRenderPipelineDescriptor()

@@ -16,10 +16,20 @@ typedef struct {
 } Params;
 
 typedef enum {
+    VertexAttributePosition = 0,
+    VertexAttributeNormal = 1,
+    VertexAttributeUV = 2
+} VertexAttributes;
+
+typedef enum {
     VertexBufferIndex = 0,
+    UVBufferIndex = 1,
     UniformsBufferIndex = 11,
     ParamsBufferIndex = 12,
-    BaseColorIndex = 13
 } BufferIndices;
+
+typedef enum {
+    BaseColorIndex = 0
+} TextureIndices;
 
 #endif /* Common_h */

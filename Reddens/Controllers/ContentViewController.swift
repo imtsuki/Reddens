@@ -22,6 +22,7 @@ class ContentViewController: NSViewController {
         if let url = notification.userInfo?["url"] as? URL {
             print(url)
             metalView.renderer?.loadAsset(url: url)
+            self.view.window?.setTitleWithRepresentedFilename(url.absoluteString)
         }
     }
 

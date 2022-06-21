@@ -39,21 +39,8 @@ struct Submesh {
         self.mdlSubmesh = mdlSubmesh
         self.mtkSubmesh = mtkSubmesh
         self.texture = Texture()
-        if let baseColorProperty = mdlSubmesh.material?.property(with: .baseColor) {
-            if baseColorProperty.type == .texture {
-                let mdlTexture = baseColorProperty.textureSamplerValue?.texture
-                let textureLoader = Renderer.textureLoader
-                let options: [MTKTextureLoader.Option: Any] = [
-                    .SRGB: false,
-                    .origin: MTKTextureLoader.Origin.bottomLeft // Flip the image if needed
-                ]
-                self.texture.baseColor = try? textureLoader?.newTexture(texture: mdlTexture!, options: options)
-            } else if baseColorProperty.type == .float3 {
-                self.texture.baseColor = Texture.solidColor(color: baseColorProperty.float3Value)
-            } else {
-                print("Unhandled property type \(String(describing: baseColorProperty.type))")
-                self.texture.baseColor = Texture.solidColor()
-            }
+        if let material = self.mdlSubmesh.material {
+            self.texture.baseColor = Texture.extract(from: material, with: .baseColor)
         } else {
             self.texture.baseColor = Texture.solidColor()
         }

@@ -20,4 +20,32 @@ class Texture {
         }
         return texture
     }
+
+    static func extract(from material: MDLMaterial, with semantic: MDLMaterialSemantic) -> MTLTexture? {
+        if let property = material.property(with: semantic) {
+            switch property.type {
+            case .texture:
+                let mdlTexture = property.textureSamplerValue?.texture
+                let textureLoader = Renderer.textureLoader
+                let options: [MTKTextureLoader.Option: Any] = [
+                    .SRGB: false,
+                    .origin: MTKTextureLoader.Origin.bottomLeft // Flip the image if needed
+                ]
+                return try? textureLoader?.newTexture(texture: mdlTexture!, options: options)
+            case .float3:
+                return Texture.solidColor(color: property.float3Value)
+            case .string, .URL, .color, .float, .float2, .float4, .matrix44, .buffer:
+                print("Unhandled material property type \(String(describing: property.type))")
+                return Texture.solidColor()
+            case .none:
+                print("Material property not initialized")
+                return Texture.solidColor()
+            @unknown default:
+                return Texture.solidColor()
+            }
+        } else {
+            print("Material property not found")
+            return Texture.solidColor()
+        }
+    }
 }

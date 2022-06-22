@@ -48,6 +48,11 @@ class Model {
                     index: BaseColorIndex.index
                 )
 
+                encoder.setFragmentTexture(
+                    submesh.texture.emission,
+                    index: EmissionIndex.index
+                )
+
                 encoder.drawIndexedPrimitives(
                     type: .triangle,
                     indexCount: submesh.indexCount,

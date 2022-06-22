@@ -2,6 +2,9 @@ import MetalKit
 
 class Texture {
     var baseColor: MTLTexture?
+    var metallic: MTLTexture?
+    var roughness: MTLTexture?
+    var emission: MTLTexture?
 
     static func solidColor(color input: SIMD3<Float> = [1, 0, 0]) -> MTLTexture? {
         let color = simd_float4(input, 1);
@@ -21,7 +24,11 @@ class Texture {
         return texture
     }
 
-    static func extract(from material: MDLMaterial, with semantic: MDLMaterialSemantic) -> MTLTexture? {
+    static func extract(
+        from material: MDLMaterial,
+        with semantic: MDLMaterialSemantic,
+        default color: SIMD3<Float> = [1, 0, 0]
+    ) -> MTLTexture? {
         if let property = material.property(with: semantic) {
             switch property.type {
             case .texture:
@@ -36,16 +43,16 @@ class Texture {
                 return Texture.solidColor(color: property.float3Value)
             case .string, .URL, .color, .float, .float2, .float4, .matrix44, .buffer:
                 print("Unhandled material property type \(String(describing: property.type))")
-                return Texture.solidColor()
+                return Texture.solidColor(color: color)
             case .none:
                 print("Material property not initialized")
-                return Texture.solidColor()
+                return Texture.solidColor(color: color)
             @unknown default:
-                return Texture.solidColor()
+                return Texture.solidColor(color: color)
             }
         } else {
             print("Material property not found")
-            return Texture.solidColor()
+            return Texture.solidColor(color: color)
         }
     }
 }

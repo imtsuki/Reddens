@@ -41,6 +41,7 @@ struct Submesh {
         self.texture = Texture()
         if let material = self.mdlSubmesh.material {
             self.texture.baseColor = Texture.extract(from: material, with: .baseColor)
+            self.texture.emission = Texture.extract(from: material, with: .emission, default: [0, 0, 0])
         } else {
             self.texture.baseColor = Texture.solidColor()
         }

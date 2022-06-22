@@ -19,8 +19,6 @@
 		8490B9FA2856C26600638718 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8490B9F92856C26600638718 /* Shaders.metal */; };
 		8490B9FE2856C98500638718 /* Donut.usdc in Resources */ = {isa = PBXBuildFile; fileRef = 8490B9FD2856C98500638718 /* Donut.usdc */; };
 		84EE8D632856CEE600DE894E /* train.usd in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D622856CEE600DE894E /* train.usd */; };
-		84EE8D6B2856E0A800DE894E /* Donut.obj in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6A2856E0A800DE894E /* Donut.obj */; };
-		84EE8D6D2856E0BA00DE894E /* Donut.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 84EE8D6C2856E0BA00DE894E /* Donut.mtl */; };
 		84EE8D6F2856EA9300DE894E /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */; };
 		84EE8D732856F93600DE894E /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D722856F93600DE894E /* MainWindowController.swift */; };
 		84EE8D7528578AB100DE894E /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE8D7428578AB100DE894E /* SidebarView.swift */; };
@@ -67,8 +65,6 @@
 		8490B9F92856C26600638718 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		8490B9FD2856C98500638718 /* Donut.usdc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Donut.usdc; sourceTree = "<group>"; };
 		84EE8D622856CEE600DE894E /* train.usd */ = {isa = PBXFileReference; lastKnownFileType = file; path = train.usd; sourceTree = "<group>"; };
-		84EE8D6A2856E0A800DE894E /* Donut.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.obj; sourceTree = "<group>"; };
-		84EE8D6C2856E0BA00DE894E /* Donut.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Donut.mtl; sourceTree = "<group>"; };
 		84EE8D6E2856EA9300DE894E /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
 		84EE8D722856F93600DE894E /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		84EE8D7428578AB100DE894E /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
@@ -198,9 +194,7 @@
 		84EE8D7D2857B02300DE894E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				84EE8D6C2856E0BA00DE894E /* Donut.mtl */,
 				8490B9FD2856C98500638718 /* Donut.usdc */,
-				84EE8D6A2856E0A800DE894E /* Donut.obj */,
 				84EE8D622856CEE600DE894E /* train.usd */,
 			);
 			path = Resources;
@@ -312,8 +306,6 @@
 			files = (
 				8490B9CF2850F00600638718 /* Assets.xcassets in Resources */,
 				84EE8D632856CEE600DE894E /* train.usd in Resources */,
-				84EE8D6D2856E0BA00DE894E /* Donut.mtl in Resources */,
-				84EE8D6B2856E0A800DE894E /* Donut.obj in Resources */,
 				8490B9D22850F00600638718 /* Main.storyboard in Resources */,
 				8490B9FE2856C98500638718 /* Donut.usdc in Resources */,
 			);

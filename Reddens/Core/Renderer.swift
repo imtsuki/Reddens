@@ -119,7 +119,7 @@ class Renderer: NSObject {
     }
 
     func loadDefaultAsset() {
-        guard let assetURL = Bundle.main.url(forResource: "Donut", withExtension: "obj") else {
+        guard let assetURL = Bundle.main.url(forResource: "Donut", withExtension: "usdc") else {
             fatalError()
         }
         loadAsset(url: assetURL)

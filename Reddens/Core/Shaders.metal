@@ -31,15 +31,17 @@ vertex VertexOut vertex_main(
 fragment float4 fragment_main(
                               VertexOut in [[stage_in]],
                               constant Params &params [[buffer(ParamsBufferIndex)]],
-                              texture2d<float> base_color_texture [[texture(BaseColorIndex)]]
+                              texture2d<float> base_color_texture [[texture(BaseColorIndex)]],
+                              texture2d<float> emission_texture [[texture(EmissionIndex)]]
 ) {
     constexpr sampler texture_sampler;
     if (params.lightingMode == 1) {
         float3 base_color = base_color_texture.sample(texture_sampler, in.uv).rgb;
+        float4 emission = float4(emission_texture.sample(texture_sampler, in.uv).rgb, 1.0);
         float4 sky = float4(base_color, 1.0);
         float4 earth = float4(base_color * 0.5, 1.0);
         float intensity = in.normal.y * 0.5 + 0.5;
-        return mix(earth, sky, intensity);
+        return mix(earth, sky, intensity) + emission;
     } else {
         return float4(in.normal, 1);
     }

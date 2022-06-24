@@ -161,6 +161,9 @@ extension Renderer: MTKViewDelegate {
         let rotationMatrix = float4x4(rotation: [inspectorPreferences.rotationX, inspectorPreferences.rotationY, inspectorPreferences.rotationZ])
         let scalingMatrix = float4x4(scaling: [scaling, scaling, scaling])
         uniforms.modelMatrix = translationMatrix * rotationMatrix * scalingMatrix
+        uniforms.normalMatrix.columns.0 = uniforms.modelMatrix[0].xyz
+        uniforms.normalMatrix.columns.1 = uniforms.modelMatrix[1].xyz
+        uniforms.normalMatrix.columns.2 = uniforms.modelMatrix[2].xyz
 
         uniforms.viewMatrix = float4x4(translation: [0, 0, 0]).inverse
 

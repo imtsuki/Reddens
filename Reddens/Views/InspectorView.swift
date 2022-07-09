@@ -13,23 +13,30 @@ struct InspectorView: View {
 
                 Slider(value: $inspectorModel.preferences.modelScaling, in: -3...1) {
                     Text("Scaling")
+                } minimumValueLabel: {
+                    Label("Zoom out", systemImage: "minus.magnifyingglass")
+                } maximumValueLabel: {
+                    Label("Zoom in", systemImage: "plus.magnifyingglass")
                 }
+                .labelsHidden()
+                .labelStyle(IconOnlyLabelStyle())
 
                 Divider()
 
                 Group {
                     Slider(value: $inspectorModel.preferences.rotationX, in: 0...2 * Float.pi) {
-                        Text("X")
+                        Label("Pitch", systemImage: "trapezoid.and.line.vertical")
                     }
 
                     Slider(value: $inspectorModel.preferences.rotationY, in: 0...2 * Float.pi) {
-                        Text("Y")
+                        Label("Yaw", systemImage: "trapezoid.and.line.horizontal")
                     }
 
                     Slider(value: $inspectorModel.preferences.rotationZ, in: 0...2 * Float.pi) {
-                        Text("Z")
+                        Label("Roll", systemImage: "arrow.clockwise")
                     }
                 }
+                .labelStyle(IconOnlyLabelStyle())
 
                 Divider()
 
